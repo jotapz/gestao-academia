@@ -30,7 +30,7 @@ Este backend é desenvolvido em **Java** e utiliza **MySQL** como banco de dados
 ### 🚀 Tecnologias Utilizadas
 
 - **Backend:**
-  - [Java 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
+  - [Java 22](https://www.oracle.com/java/technologies/javase/jdk22-archive-downloads.html)
 - **Banco de Dados:**
   - [MySQL 8](https://dev.mysql.com/downloads/mysql/)
 - **Ferramentas de Desenvolvimento:**
