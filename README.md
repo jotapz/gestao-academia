@@ -14,7 +14,7 @@ Este backend é desenvolvido em **Java** e utiliza **MySQL** como banco de dados
 
 - [Funcionalidades](#-funcionalidades)
 - [Tecnologias Utilizadas](#-tecnologias-utilizadas)
-- [Autor](#-autor)
+- [Autores](#-autores)
 
 ---
 
