@@ -44,4 +44,3 @@ Este backend é desenvolvido em **Java** e utiliza **MySQL** como banco de dados
 - **João Pedro Soares Franco** - [LinkedIn](https://www.linkedin.com/in/jo%C3%A3o-pedro-franco-545436221/) - [GitHub](https://github.com/jotapz)
 - **Lara Stephanny** - [LinkedIn](https://www.linkedin.com/in/lara-stephanny-0317a82b5/) - [GitHub](https://github.com/LaraSLGomes)
 
----
