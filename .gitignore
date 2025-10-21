@@ -27,3 +27,34 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+# Java bytecode
+*.class
+
+# Compiled output
+/bin/
+/out/
+/build/
+
+# Logs and temp files
+*.log
+*.tmp
+
+# Package Files
+*.jar
+*.war
+*.ear
+
+# Maven/Gradle
+/target/
+/.gradle/
+
+# Editor swap/temp
+*.swp
+*~
+
+# Windows
+Thumbs.db
+
+# Ignore compiled classes under src/ if any
+src/**/*.class

@@ -1,6 +1,7 @@
 package Views;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 
 public class TelaPrincipalView extends JFrame {
 
@@ -42,12 +43,20 @@ public class TelaPrincipalView extends JFrame {
         }
 
         private void initListeners() {
-            btnGerenciarAlunos.addActionListener(e -> {
-                JOptionPane.showMessageDialog(this, "Abrindo tela de alunos...");
-                 new TelaAlunoView().setVisible(true); // chamando outra tela
+            btnGerenciarAlunos.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    JOptionPane.showMessageDialog(TelaPrincipalView.this, "Abrindo tela de alunos...");
+                    new TelaAlunoView().setVisible(true); // chamando outra tela
+                }
             });
 
-            btnGerenciarInstrutores.addActionListener(e -> {
+            btnGerenciarInstrutores.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Abre a tela de instrutores quando o botão for clicado
+                    new TelaInstrutorView().setVisible(true);
+                }
             });
         }
     }

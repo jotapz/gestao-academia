@@ -8,6 +8,10 @@ public class PlanoTreino {
     private int duracao_semanas;
 
 
+    // Construtor vazio para uso pelos DAOs
+    public PlanoTreino() {
+    }
+
     public PlanoTreino(int id_plano, int duracao_semanas, String descricao, int id_instrutor, int id_aluno) {
         this.id_plano = id_plano;
         this.duracao_semanas = duracao_semanas;
@@ -24,6 +28,15 @@ public class PlanoTreino {
         this.id_plano = id_plano;
     }
 
+    // Métodos compatíveis com DAOs
+    public int getId() {
+        return this.id_plano;
+    }
+
+    public void setId(int id) {
+        this.id_plano = id;
+    }
+
     public int getId_aluno() {
         return id_aluno;
     }
@@ -32,12 +45,35 @@ public class PlanoTreino {
         this.id_aluno = id_aluno;
     }
 
+    // Relacionamento com objetos
+    private Aluno aluno;
+
+    public Aluno getAluno() {
+        return aluno;
+    }
+
+    public void setAluno(Aluno aluno) {
+        this.aluno = aluno;
+        if (aluno != null) this.id_aluno = aluno.getId();
+    }
+
     public int getId_instrutor() {
         return id_instrutor;
     }
 
     public void setId_instrutor(int id_instrutor) {
         this.id_instrutor = id_instrutor;
+    }
+
+    private Instrutor instrutor;
+
+    public Instrutor getInstrutor() {
+        return instrutor;
+    }
+
+    public void setInstrutor(Instrutor instrutor) {
+        this.instrutor = instrutor;
+        if (instrutor != null) this.id_instrutor = instrutor.getId();
     }
 
     public String getDescricao() {
@@ -54,5 +90,14 @@ public class PlanoTreino {
 
     public void setDuracao_semanas(int duracao_semanas) {
         this.duracao_semanas = duracao_semanas;
+    }
+
+    // Convenções camelCase esperadas pelos DAOs
+    public int getDuracaoSemanas() {
+        return this.duracao_semanas;
+    }
+
+    public void setDuracaoSemanas(int duracaoSemanas) {
+        this.duracao_semanas = duracaoSemanas;
     }
 }
