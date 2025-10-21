@@ -8,6 +8,10 @@ public class Aluno {
     private String cpf;
     private Date data_ingresso;
 
+    // Construtor vazio para permitir criação sem parâmetros
+    public Aluno() {
+    }
+
     public Aluno(int id_Aluno, String nome, String cpf, Date data_ingresso) {
         this.id_Aluno = id_Aluno;
         this.nome = nome;
@@ -15,6 +19,7 @@ public class Aluno {
         this.data_ingresso = data_ingresso;
     }
 
+    // Métodos originais (mantidos)
     public int getId_Aluno() {
         return id_Aluno;
     }
@@ -45,5 +50,22 @@ public class Aluno {
 
     public void setData_ingresso(Date data_ingresso) {
         this.data_ingresso = data_ingresso;
+    }
+
+    // Métodos compatíveis com AlunoDAO e outros DAOs
+    public int getId() {
+        return this.id_Aluno;
+    }
+
+    public void setId(int id) {
+        this.id_Aluno = id;
+    }
+
+    public Date getDataIngresso() {
+        return this.data_ingresso;
+    }
+
+    public void setDataIngresso(Date dataIngresso) {
+        this.data_ingresso = dataIngresso;
     }
 }
