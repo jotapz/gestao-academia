@@ -70,11 +70,43 @@ public class PlanoTreinoDAO {
         return plano;
     }
 
-    public List<PlanoTreino> listarTodos() {
-        // Implementação similar ao buscarPorId, mas sem a cláusula WHERE e com um loop
-        // ...
-        return new ArrayList<>(); // Retornando lista vazia por brevidade
-    }
+        public List<PlanoTreino> listarTodos() {
+            String sql = "SELECT pt.*, a.nome AS aluno_nome, i.nome AS instrutor_nome " +
+                    "FROM PlanoTreino pt " +
+                    "LEFT JOIN Aluno a ON pt.id_aluno = a.id_aluno " +
+                    "LEFT JOIN Instrutor i ON pt.id_instrutor = i.id_instrutor " +
+                    "ORDER BY pt.id_plano";
+
+            List<PlanoTreino> planos = new ArrayList<>();
+
+            try (Connection conn = ConexaoFactory.getConexao();
+                 PreparedStatement ps = conn.prepareStatement(sql);
+                 ResultSet rs = ps.executeQuery()) {
+
+                while (rs.next()) {
+                    PlanoTreino plano = new PlanoTreino();
+                    plano.setId(rs.getInt("id_plano"));
+                    plano.setDescricao(rs.getString("descricao"));
+                    plano.setDuracaoSemanas(rs.getInt("duracao_semanas"));
+
+                    Aluno aluno = new Aluno();
+                    aluno.setId(rs.getInt("id_aluno"));
+                    aluno.setNome(rs.getString("aluno_nome"));
+                    plano.setAluno(aluno);
+
+                    Instrutor instrutor = new Instrutor();
+                    instrutor.setId(rs.getInt("id_instrutor"));
+                    instrutor.setNome(rs.getString("instrutor_nome"));
+                    plano.setInstrutor(instrutor);
+
+                    planos.add(plano);
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException("Erro ao listar todos os planos de treino: " + e.getMessage(), e);
+            }
+            return planos;
+        }
+
 
     public void atualizar(PlanoTreino plano) {
         String sql = "UPDATE PlanoTreino SET descricao = ?, duracao_semanas = ?, id_aluno = ?, id_instrutor = ? WHERE id_plano = ?";
