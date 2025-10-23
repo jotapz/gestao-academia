@@ -5,10 +5,10 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class ConexaoFactory {
-    // --- Configure aqui os dados do seu banco ---
-    private static final String URL = "jdbc:mysql://localhost:3306/gestao_academia"; // Altere para o nome do seu banco
-    private static final String USER = "root"; // Altere para seu usuário
-    private static final String PASSWORD = "root"; // Altere para sua senha
+
+    private static final String URL = "jdbc:mysql://localhost:3306/gestao_academia";
+    private static final String USER = "root";
+    private static final String PASSWORD = "root";
 
     public static Connection getConexao() {
         try {
