@@ -6,9 +6,9 @@ import java.sql.SQLException;
 
 public class ConexaoFactory {
 
-    private static final String URL = "jdbc:mysql://localhost:3306/gestao_academia";
+    private static final String URL = "jdbc:mysql://localhost:3306/academia";
     private static final String USER = "root";
-    private static final String PASSWORD = "root";
+    private static final String PASSWORD = "1234";
 
     public static Connection getConexao() {
         try {
