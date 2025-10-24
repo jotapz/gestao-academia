@@ -1,0 +1,66 @@
+package Views;
+
+import controller.FrequenciaController;
+import controller.AlunoController;
+import entity.Aluno;
+import entity.Frequencia;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.util.Date;
+import java.util.List;
+
+public class FrequenciaView extends JFrame {
+    private FrequenciaController controller = new FrequenciaController();
+    private AlunoController alunoCtrl = new AlunoController();
+
+    private JComboBox<Aluno> cbAluno = new JComboBox<>();
+    private JCheckBox chkPresente = new JCheckBox("Presente");
+    private JButton btnSalvar = new JButton("Registrar");
+    private JButton btnListar = new JButton("Listar");
+    private JTextArea txtResultado = new JTextArea(10, 40);
+
+    public FrequenciaView() {
+        super("Registro de Frequência");
+        setLayout(new FlowLayout());
+        carregarAlunos();
+
+        add(new JLabel("Aluno:"));
+        add(cbAluno);
+        add(chkPresente);
+        add(btnSalvar);
+        add(btnListar);
+        add(new JScrollPane(txtResultado));
+
+        btnSalvar.addActionListener(this::registrar);
+        btnListar.addActionListener(this::listar);
+
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        pack();
+        setVisible(true);
+    }
+
+    private void carregarAlunos() {
+        cbAluno.removeAllItems();
+        for (Aluno a : alunoCtrl.listar()) cbAluno.addItem(a);
+    }
+
+    private void registrar(ActionEvent e) {
+        Aluno aluno = (Aluno) cbAluno.getSelectedItem();
+        Frequencia f = new Frequencia();
+        f.setAluno(aluno);
+        f.setData(new Date());
+        f.setPresenca(chkPresente.isSelected());
+        controller.registrar(f);
+        JOptionPane.showMessageDialog(this, "Frequência registrada!");
+    }
+
+    private void listar(ActionEvent e) {
+        Aluno aluno = (Aluno) cbAluno.getSelectedItem();
+        List<Frequencia> lista = controller.listarPorAluno(aluno.getId());
+        txtResultado.setText("");
+        for (Frequencia f : lista) {
+            txtResultado.append("Data: " + f.getData() + " | Presença: " + (f.isPresenca() ? "Sim" : "Não") + "\n");
+        }
+    }
+}
