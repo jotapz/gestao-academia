@@ -7,7 +7,6 @@ public class Frequencia {
     private Date data;
     private boolean presenca;
 
-    // Construtor vazio para DAOs
     public Frequencia() {
     }
 
@@ -18,15 +17,6 @@ public class Frequencia {
         this.presenca = presenca;
     }
 
-    public int getId_frequencia() {
-        return id_frequencia;
-    }
-
-    public void setId_frequencia(int id_frequencia) {
-        this.id_frequencia = id_frequencia;
-    }
-
-    // Métodos compatíveis com DAOs
     public int getId() {
         return this.id_frequencia;
     }
@@ -35,15 +25,6 @@ public class Frequencia {
         this.id_frequencia = id;
     }
 
-    public int getId_aluno() {
-        return id_aluno;
-    }
-
-    public void setId_aluno(int id_aluno) {
-        this.id_aluno = id_aluno;
-    }
-
-    // Para relacionamento com objeto Aluno (usado pelos DAOs)
     private Aluno aluno;
 
     public Aluno getAluno() {

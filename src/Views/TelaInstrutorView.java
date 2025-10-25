@@ -1,134 +1,118 @@
 package Views;
 
-import dao.InstrutorDAO;
+import controller.InstrutorController;
 import entity.Instrutor;
-
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
 
 public class TelaInstrutorView extends JFrame {
-
-	private JTable table;
-	private DefaultTableModel tableModel;
-	private InstrutorDAO instrutorDAO = new InstrutorDAO();
+	private InstrutorController controller = new InstrutorController();
+	private JTextField txtNome = new JTextField(20);
+	private JTextField txtEsp = new JTextField(15);
+	private JButton btnSalvar = new JButton("Salvar");
+	private JButton btnListar = new JButton("Listar");
+	private JButton btnDeletar = new JButton("Deletar");
+	private JButton btnAtualizar = new JButton("Atualizar");
+	private JTextArea txtResultado = new JTextArea(10, 40);
 
 	public TelaInstrutorView() {
-		super("Tela Instrutor");
-		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		this.setSize(600, 400);
-		this.setLayout(new BorderLayout());
-		this.setLocationRelativeTo(null);
+		super("Cadastro de Instrutores");
 
-		initComponents();
-		loadInstrutores();
+		setLayout(new BorderLayout(5,5));
+
+		JPanel painelCampos = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		painelCampos.add(new JLabel("Nome:"));
+		painelCampos.add(txtNome);
+		painelCampos.add(new JLabel("Especialidade:"));
+		painelCampos.add(txtEsp);
+
+		JPanel painelBotoes = new JPanel();
+		painelBotoes.add(btnSalvar);
+		painelBotoes.add(btnListar);
+		painelBotoes.add(btnDeletar);
+		painelBotoes.add(btnAtualizar);
+
+		add(painelCampos, BorderLayout.NORTH);
+		add(painelBotoes, BorderLayout.SOUTH);
+		add(new JScrollPane(txtResultado), BorderLayout.CENTER);
+
+		btnSalvar.addActionListener(this::salvar);
+		btnListar.addActionListener(this::listar);
+		btnDeletar.addActionListener(this::deletar);
+		btnAtualizar.addActionListener(this::atualizar);
+
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		pack();
+		setVisible(true);
 	}
 
-	private void initComponents() {
-		tableModel = new DefaultTableModel(new Object[]{"ID", "Nome", "Especialidade"}, 0) {
-			@Override
-			public boolean isCellEditable(int row, int column) {
-				return false;
-			}
-		};
-		table = new JTable(tableModel);
-		this.add(new JScrollPane(table), BorderLayout.CENTER);
-
-		JPanel pnlButtons = new JPanel();
-		JButton btnAdd = new JButton("Adicionar");
-		JButton btnEdit = new JButton("Editar");
-		JButton btnDelete = new JButton("Deletar");
-
-		pnlButtons.add(btnAdd);
-		pnlButtons.add(btnEdit);
-		pnlButtons.add(btnDelete);
-		this.add(pnlButtons, BorderLayout.SOUTH);
-
-		btnAdd.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Instrutor i = showInstrutorDialog(null);
-				if (i != null) {
-					instrutorDAO.salvar(i);
-					loadInstrutores();
-				}
-			}
-		});
-
-		btnEdit.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				int sel = table.getSelectedRow();
-				if (sel >= 0) {
-					int id = (int) tableModel.getValueAt(sel, 0);
-					Instrutor existente = instrutorDAO.buscarPorId(id);
-					Instrutor atualizado = showInstrutorDialog(existente);
-					if (atualizado != null) {
-						instrutorDAO.atualizar(atualizado);
-						loadInstrutores();
-					}
-				} else {
-					JOptionPane.showMessageDialog(TelaInstrutorView.this, "Selecione um instrutor para editar.");
-				}
-			}
-		});
-
-		btnDelete.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				int sel = table.getSelectedRow();
-				if (sel >= 0) {
-					int id = (int) tableModel.getValueAt(sel, 0);
-					int option = JOptionPane.showConfirmDialog(TelaInstrutorView.this, "Confirma exclusão?", "Excluir", JOptionPane.YES_NO_OPTION);
-					if (option == JOptionPane.YES_OPTION) {
-						instrutorDAO.deletar(id);
-						loadInstrutores();
-					}
-				} else {
-					JOptionPane.showMessageDialog(TelaInstrutorView.this, "Selecione um instrutor para deletar.");
-				}
-			}
-		});
+	private void salvar(ActionEvent e) {
+		if (txtNome.getText().isBlank() && txtEsp.getText().isBlank()) {
+			JOptionPane.showMessageDialog(this,
+					"Campo nome e especialidade necessitam ser preenchidos",
+					"Erro de validação",
+					JOptionPane.ERROR_MESSAGE);
+		}
+		controller.cadastrar(txtNome.getText(), txtEsp.getText());
+		JOptionPane.showMessageDialog(this, "Instrutor cadastrado!");
+		listarautomatico(e);
 	}
 
-	private void loadInstrutores() {
-		tableModel.setRowCount(0);
-		List<Instrutor> instrutores;
-		try {
-			instrutores = instrutorDAO.listarTodos();
-		} catch (RuntimeException ex) {
-			JOptionPane.showMessageDialog(this, "Não foi possível carregar instrutores: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+	private void listar(ActionEvent e) {
+		List<Instrutor> lista = controller.listar();
+		txtResultado.setText("");
+		for (Instrutor instrutor : lista) {
+			txtResultado.append("ID: " + instrutor.getId() + " | Nome: " + instrutor.getNome() + " | Esp: " + instrutor.getEspecialidade() + "\n");
+		}
+		JOptionPane.showMessageDialog(this, "Instrutores listados!");
+	}
+
+	public void listarautomatico(ActionEvent e) {
+		List<Instrutor> lista = controller.listar();
+		txtResultado.setText("");
+		for (Instrutor instrutor : lista) {
+			txtResultado.append("ID: " + instrutor.getId() + " | Nome: " + instrutor.getNome() + " | Esp: " + instrutor.getEspecialidade() + "\n");
+		}
+	}
+
+	private void atualizar(ActionEvent e){
+		String idStr = JOptionPane.showInputDialog(this,
+				"Digite o ID do Instrutor que deseja Atualizar",
+				"Atulizar Instrutor",
+				JOptionPane.QUESTION_MESSAGE);
+
+		if (idStr.isBlank()) {
+			JOptionPane.showMessageDialog(this,
+					"É necessário preencher o campo com o ID do instrutor",
+					"Erro de validação",
+					JOptionPane.ERROR_MESSAGE);
 			return;
 		}
-		for (Instrutor i : instrutores) {
-			Object[] row = new Object[]{i.getId(), i.getNome(), i.getEspecialidade()};
-			tableModel.addRow(row);
-		}
+		controller.atualizar(txtNome.getText(), txtEsp.getText(), Integer.parseInt(idStr));
+		listarautomatico(e);
 	}
 
-	private Instrutor showInstrutorDialog(Instrutor existente) {
-		JTextField txtNome = new JTextField();
-		JTextField txtEspecialidade = new JTextField();
 
-		if (existente != null) {
-			txtNome.setText(existente.getNome());
-			txtEspecialidade.setText(existente.getEspecialidade());
+	private void deletar (ActionEvent e) {
+		String idStr = JOptionPane.showInputDialog(this,
+				"Digite o ID do Instrutor que você deseja deletar",
+				"Deletar Instruutor",
+				JOptionPane.QUESTION_MESSAGE);
+		if (idStr.isBlank()) {
+			JOptionPane.showMessageDialog(this, "Para deletar é necessário o ID");
+			return;
 		}
-
-		JPanel panel = new JPanel(new GridLayout(0,1));
-		panel.add(new JLabel("Nome:")); panel.add(txtNome);
-		panel.add(new JLabel("Especialidade:")); panel.add(txtEspecialidade);
-
-		int result = JOptionPane.showConfirmDialog(this, panel, existente == null ? "Adicionar Instrutor" : "Editar Instrutor", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-		if (result == JOptionPane.OK_OPTION) {
-			Instrutor i = existente != null ? existente : new Instrutor();
-			i.setNome(txtNome.getText());
-			i.setEspecialidade(txtEspecialidade.getText());
-			return i;
+		int id = Integer.parseInt(idStr);
+		int confirm = JOptionPane.showConfirmDialog(this,
+				"certeza que quer deletar o id " + id + "?",
+				"Confirmação",
+				JOptionPane.YES_NO_OPTION);
+		if (confirm == JOptionPane.YES_NO_OPTION) {
+			controller.deletar(id);
+			JOptionPane.showMessageDialog(this,"Instrutor deletado com suuceesso!");
+			listarautomatico(e);
 		}
-		return null;
 	}
 }

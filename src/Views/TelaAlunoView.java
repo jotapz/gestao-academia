@@ -1,147 +1,124 @@
 package Views;
 
-import dao.AlunoDAO;
+import controller.AlunoController;
 import entity.Aluno;
-
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class TelaAlunoView extends JFrame {
+    //instanciando o controller
+    private AlunoController controller = new AlunoController();
+    private JTextField txtNome = new JTextField(20);
+    private JTextField txtCpf = new JTextField(15);
+    private JButton btnSalvar = new JButton("Salvar");
+    private JButton btnListar = new JButton("Listar");
+    private JButton btnAtualizar = new JButton("Atualizar");
+    private JButton btnDeletar = new JButton("Deletar");
+    private JTextArea txtResultado = new JTextArea(10, 40);
 
-    private JTable table;
-    private DefaultTableModel tableModel;
-    private AlunoDAO alunoDAO = new AlunoDAO();
+    public TelaAlunoView() {
+        super("Cadastro de Alunos");
+        //tirei o flow layout pq queria deixar como blocos e pra isso é melhoor o borderlayout
+        setLayout(new BorderLayout(5,5));
 
-    public TelaAlunoView(){
-        super("Tela Aluno");
-        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        this.setSize(700, 400);
-        this.setLayout(new BorderLayout());
-        this.setLocationRelativeTo(null);
+        // aqui eu to criando tipo uma div para colocar os campos de texto nome e cpf
+        JPanel painelCampos = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        painelCampos.add(new JLabel("Nome: "));
+        painelCampos.add(txtNome);
+        painelCampos.add(new JLabel("Cpf: "));
+        painelCampos.add(txtCpf);
 
-        initComponents();
-        loadAlunos();
+        // outra div com os botoes
+        JPanel painelBotoes = new JPanel();
+        painelBotoes.add(btnSalvar);
+        painelBotoes.add(btnListar);
+        painelBotoes.add(btnAtualizar);
+        painelBotoes.add(btnDeletar);
+
+        //aquui euu to posicionando as "divs"
+        add(painelCampos, BorderLayout.NORTH);
+        add(new JScrollPane(txtResultado), BorderLayout.CENTER); //area onde vai listar os dados
+        add(painelBotoes, BorderLayout.SOUTH);
+
+        btnSalvar.addActionListener(this::salvar);
+        btnListar.addActionListener(this::listar);
+        btnAtualizar.addActionListener(this::atualizar);
+        btnDeletar.addActionListener(this::deletar);
+
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        pack();
+        setLocationRelativeTo(null);
+        setVisible(true);
     }
 
-    private void initComponents(){
-        tableModel = new DefaultTableModel(new Object[]{"ID", "Nome", "CPF", "Data Ingresso"}, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-        table = new JTable(tableModel);
-        this.add(new JScrollPane(table), BorderLayout.CENTER);
-
-        JPanel pnlButtons = new JPanel();
-        JButton btnAdd = new JButton("Adicionar");
-        JButton btnEdit = new JButton("Editar");
-        JButton btnDelete = new JButton("Deletar");
-
-        pnlButtons.add(btnAdd);
-        pnlButtons.add(btnEdit);
-        pnlButtons.add(btnDelete);
-        this.add(pnlButtons, BorderLayout.SOUTH);
-
-        btnAdd.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Aluno a = showAlunoDialog(null);
-                if (a != null) {
-                    alunoDAO.salvar(a);
-                    loadAlunos();
-                }
-            }
-        });
-
-        btnEdit.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int sel = table.getSelectedRow();
-                if (sel >= 0) {
-                    int id = (int) tableModel.getValueAt(sel, 0);
-                    Aluno existente = alunoDAO.buscarPorId(id);
-                    Aluno atualizado = showAlunoDialog(existente);
-                    if (atualizado != null) {
-                        alunoDAO.atualizar(atualizado);
-                        loadAlunos();
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(TelaAlunoView.this, "Selecione um aluno para editar.");
-                }
-            }
-        });
-
-        btnDelete.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int sel = table.getSelectedRow();
-                if (sel >= 0) {
-                    int id = (int) tableModel.getValueAt(sel, 0);
-                    int option = JOptionPane.showConfirmDialog(TelaAlunoView.this, "Confirma exclusão?", "Excluir", JOptionPane.YES_NO_OPTION);
-                    if (option == JOptionPane.YES_OPTION) {
-                        alunoDAO.deletar(id);
-                        loadAlunos();
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(TelaAlunoView.this, "Selecione um aluno para deletar.");
-                }
-            }
-        });
+    private void salvar(ActionEvent e) {
+        //se os campos estiverem vazios ele vai mostrar um aviso
+        if (txtNome.getText() == null && txtCpf.getText() == null|| txtNome.getText().isBlank() && txtCpf.getText().isBlank()){
+            JOptionPane.showMessageDialog(this,
+                    "Campo nome e cpf precisa ser preenchido",
+                    "Erro de validação",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+        //caso nao esteja vazio ele vai chamar o metodo cadastrar do AlunoController e passar como parametro o txtnome e txtcpf coomo string.
+        controller.cadastrar(txtNome.getText(), txtCpf.getText());
+        JOptionPane.showMessageDialog(this, "Aluno cadastrado!");
     }
 
-    private void loadAlunos(){
-        tableModel.setRowCount(0);
-        List<Aluno> alunos;
-        try {
-            alunos = alunoDAO.listarTodos();
-        } catch (RuntimeException ex) {
-            JOptionPane.showMessageDialog(this, "Não foi possível carregar alunos: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+    private void listar(ActionEvent e) {
+        List<Aluno> lista = controller.listar();
+        txtResultado.setText("");
+        for (Aluno aluno : lista) {
+            txtResultado.append("ID: " + aluno.getId() + " | Nome: " + aluno.getNome() + " | CPF: " + aluno.getCpf() + "\n");
+        }
+        JOptionPane.showMessageDialog(this, "Alunos listados!");
+    }
+
+    //update atualizar na view
+    private void atualizar(ActionEvent e) {
+        //cria uma tela que tem uum input e voce vai adicionar o id ele vai ser uuma string
+        String idStr = JOptionPane.showInputDialog(this,
+                "Digite o ID do aluno que deseja ATUALIZAR:",
+                "Atualizar Aluno",
+                JOptionPane.QUESTION_MESSAGE);
+        // see o campo tiver vazio ele avisa e retorna
+        if (idStr.isBlank()) {
+            JOptionPane.showMessageDialog(this,
+                    "Precisa ter o ID",
+                    "Erro de validação",
+                    JOptionPane.ERROR_MESSAGE);
             return;
         }
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        for (Aluno a : alunos) {
-            Object[] row = new Object[]{a.getId(), a.getNome(), a.getCpf(), a.getDataIngresso() != null ? df.format(a.getDataIngresso()) : ""};
-            tableModel.addRow(row);
-        }
+        //chama o metodo atualizar do alunocontroller passando no parâmetro o get do txtnome e txtcpf para atualizar o aluno coom aquele id
+        controller.atualizar(txtNome.getText(), txtCpf.getText(), Integer.parseInt(idStr));
     }
 
-    private Aluno showAlunoDialog(Aluno existente){
-        JTextField txtNome = new JTextField();
-        JTextField txtCpf = new JTextField();
-        JTextField txtData = new JTextField();
 
-        if (existente != null) {
-            txtNome.setText(existente.getNome());
-            txtCpf.setText(existente.getCpf());
-            if (existente.getDataIngresso() != null) txtData.setText(new SimpleDateFormat("yyyy-MM-dd").format(existente.getDataIngresso()));
+    // aqui fiz o deletar na view
+    private void deletar(ActionEvent e) {
+        // aqui ele cria um campo onde voce vai mandar um numero em string
+        String idStr = JOptionPane.showInputDialog(this,
+                "Digite o ID do aluno que deseja deletar",
+                "Deletar Aluno",
+                JOptionPane.QUESTION_MESSAGE);
+        // se o tiver vazio vai mostrar que é necessario o id
+        if (idStr == null || idStr.isBlank()) {
+            JOptionPane.showMessageDialog(this, "Para deletar é necessário o ID");
+            return;
         }
-
-        JPanel panel = new JPanel(new GridLayout(0,1));
-        panel.add(new JLabel("Nome:")); panel.add(txtNome);
-        panel.add(new JLabel("CPF:")); panel.add(txtCpf);
-        panel.add(new JLabel("Data Ingresso (yyyy-MM-dd):")); panel.add(txtData);
-
-        int result = JOptionPane.showConfirmDialog(this, panel, existente == null ? "Adicionar Aluno" : "Editar Aluno", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-        if (result == JOptionPane.OK_OPTION) {
-            try {
-                Aluno a = existente != null ? existente : new Aluno();
-                a.setNome(txtNome.getText());
-                a.setCpf(txtCpf.getText());
-                if (!txtData.getText().trim().isEmpty()) {
-                    java.util.Date parsed = new SimpleDateFormat("yyyy-MM-dd").parse(txtData.getText().trim());
-                    a.setDataIngresso(parsed);
-                }
-                return a;
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Erro ao ler dados: " + ex.getMessage());
-            }
+        // aqui ele declara que o int id vai ter o valor digitado no campo string mas ele manda em int
+        int id = Integer.parseInt(idStr);
+        //tela de confirmar se realment deseja deletar o id do aluno
+        int confirm = JOptionPane.showConfirmDialog(this,
+                "certeza que quer deletar o id " + id + "?",
+                "Confirmação",
+                JOptionPane.YES_NO_OPTION);
+        //se confirmou ele vai chamar o metodoo deletar do Alunocontroller!!
+        if (confirm == JOptionPane.YES_NO_OPTION) {
+            controller.deletar(id);
+            JOptionPane.showMessageDialog(this,"Aluno deletado com sucesso!");
         }
-        return null;
     }
 }

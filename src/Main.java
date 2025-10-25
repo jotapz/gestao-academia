@@ -1,9 +1,9 @@
-import Views.TelaPrincipalView;
+import Views.MainView;
 
 public class Main {
     public static void main(String[] args) {
 
-        TelaPrincipalView telap = new TelaPrincipalView();
+        MainView telap = new MainView();
         telap.setVisible(true);
 
 
