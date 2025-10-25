@@ -5,7 +5,6 @@ public class Instrutor {
     private String nome;
     private String especialidade;
 
-    // Construtor vazio necessário para DAOs
     public Instrutor() {
     }
 
@@ -15,15 +14,6 @@ public class Instrutor {
         this.especialidade = especialidade;
     }
 
-    public int getId_Instrutor() {
-        return id_Instrutor;
-    }
-
-    public void setId_Instrutor(int id_Instrutor) {
-        this.id_Instrutor = id_Instrutor;
-    }
-
-    // Métodos compatíveis com convenção usada pelos DAOs
     public int getId() {
         return this.id_Instrutor;
     }
@@ -46,5 +36,10 @@ public class Instrutor {
 
     public void setEspecialidade(String especialidade) {
         this.especialidade = especialidade;
+    }
+
+    @Override
+    public String toString() {
+        return nome;
     }
 }

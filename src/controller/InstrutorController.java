@@ -7,16 +7,16 @@ import java.util.List;
 public class InstrutorController {
     private InstrutorService service = new InstrutorService();
 
-    public void cadastrar(Instrutor instrutor) {
-        service.salvar(instrutor);
+    public void cadastrar(String nome, String esp) {
+        service.salvar(nome, esp);
     }
 
     public List<Instrutor> listar() {
         return service.listarTodos();
     }
 
-    public void atualizar(Instrutor instrutor) {
-        service.atualizar(instrutor);
+    public void atualizar(String nome, String esp, int id) {
+        service.atualizar(nome, esp, id);
     }
 
     public void deletar(int id) {

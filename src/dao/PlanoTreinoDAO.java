@@ -137,4 +137,38 @@ public class PlanoTreinoDAO {
             throw new RuntimeException("Erro ao deletar o plano de treino: " + e.getMessage(), e);
         }
     }
+
+    public void DeletarTodosTreinosDoUsuario(int id) {
+        String sql = "DELETE "
+                + "FROM PlanoTreino pt "
+                + "WHERE pt.id_aluno = ?";
+
+        try (Connection conn = ConexaoFactory.getConexao();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao deletar" + e.getMessage(), e);
+        }
+    }
+
+    public void DeletarTodosTreinosDoInstrutor(int id) {
+        String sql = "DELETE "
+                + "FROM PlanoTreino pt "
+                + "WHERE pt.id_instrutor = ?";
+
+        try (Connection conn = ConexaoFactory.getConexao();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao deletar" + e.getMessage(), e);
+        }
+    }
+
+
 }

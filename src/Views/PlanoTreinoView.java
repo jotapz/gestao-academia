@@ -22,27 +22,48 @@ public class PlanoTreinoView extends JFrame {
     private JComboBox<Instrutor> cbInstrutor = new JComboBox<>();
     private JButton btnSalvar = new JButton("Salvar");
     private JButton btnListar = new JButton("Listar");
+    private JButton btnAtualizar = new JButton("Atualizar");
+    private JButton btnDeletar = new JButton("Deletar");
     private JTextArea txtResultado = new JTextArea(10, 40);
 
     public PlanoTreinoView() {
         super("Cadastro de Planos de Treino");
-        setLayout(new FlowLayout());
+        setLayout(new BorderLayout(5,5));
+
+
         carregarCombos();
 
-        add(new JLabel("Descrição:"));
-        add(txtDesc);
-        add(new JLabel("Duração (semanas):"));
-        add(txtDuracao);
-        add(new JLabel("Aluno:"));
-        add(cbAluno);
-        add(new JLabel("Instrutor:"));
-        add(cbInstrutor);
-        add(btnSalvar);
-        add(btnListar);
-        add(new JScrollPane(txtResultado));
+        JPanel painelCampos = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        painelCampos.add(new JLabel("Descrição:"));
+        painelCampos.add(txtDesc);
+        painelCampos.add(new JLabel("Duração (semanas):"));
+        painelCampos.add(txtDuracao);
+
+
+        JPanel painelComboBox = new JPanel();
+        painelComboBox.add(new JLabel("Aluno:"));
+        painelComboBox.add(cbAluno);
+        painelComboBox.add(new JLabel("Instrutor:"));
+        painelComboBox.add(cbInstrutor);
+
+        JPanel painelBotoes = new JPanel();
+        painelBotoes.add(btnSalvar);
+        painelBotoes.add(btnListar);
+        painelBotoes.add(btnAtualizar);
+        painelBotoes.add(btnDeletar);
+
+        JPanel painelteste = new JPanel();
+        painelteste.add(painelCampos);
+        painelteste.add(painelComboBox);
+
+        add(painelteste, BorderLayout.NORTH);
+        add(painelBotoes, BorderLayout.CENTER);
+        add(new JScrollPane(txtResultado), BorderLayout.SOUTH);
 
         btnSalvar.addActionListener(this::salvar);
         btnListar.addActionListener(this::listar);
+        btnAtualizar.addActionListener(this::atualizar);
+        btnDeletar.addActionListener(this::deletar);
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         pack();
@@ -57,12 +78,8 @@ public class PlanoTreinoView extends JFrame {
     }
 
     private void salvar(ActionEvent e) {
-        PlanoTreino p = new PlanoTreino();
-        p.setDescricao(txtDesc.getText());
-        p.setDuracaoSemanas(Integer.parseInt(txtDuracao.getText()));
-        p.setAluno((Aluno) cbAluno.getSelectedItem());
-        p.setInstrutor((Instrutor) cbInstrutor.getSelectedItem());
-        controller.cadastrar(p);
+
+        controller.cadastrar(txtDesc.getText(), Integer.parseInt(txtDuracao.getText()), ((Aluno)cbAluno.getSelectedItem()), ((Instrutor)cbInstrutor.getSelectedItem()));
         JOptionPane.showMessageDialog(this, "Plano de treino cadastrado!");
     }
 
@@ -73,5 +90,34 @@ public class PlanoTreinoView extends JFrame {
             txtResultado.append("ID: " + p.getId() + " | Desc: " + p.getDescricao() +
                     " | Aluno: " + p.getAluno().getNome() + " | Instrutor: " + p.getInstrutor().getNome() + "\n");
         }
+    }
+
+    private void atualizar(ActionEvent e){
+        String idStr = JOptionPane.showInputDialog(this,
+                "Digite o ID do plano que deseja atualizar",
+                "Atualizar plano treino",
+                JOptionPane.QUESTION_MESSAGE);
+        if (idStr.isBlank()) {
+            JOptionPane.showMessageDialog(this,
+                    "O campo precisa ser preenchido!",
+                    "Erro de validação",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+        controller.atualizar(txtDesc.getText(), Integer.parseInt(txtDuracao.getText()), ((Aluno)cbAluno.getSelectedItem()), ((Instrutor)cbInstrutor.getSelectedItem()), Integer.parseInt(idStr));
+    }
+
+    private void deletar(ActionEvent e){
+        String idStr = JOptionPane.showInputDialog(this,
+                "Preencha com o ID do plano que deseja deletar",
+                "Deletar plano treino",
+                JOptionPane.QUESTION_MESSAGE);
+
+        if (idStr.isBlank()) {
+            JOptionPane.showMessageDialog(this,
+                    "O campo precisa ser preenchido!",
+                    "Erro de validação",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+        controller.deletar(Integer.parseInt(idStr));
     }
 }

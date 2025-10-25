@@ -70,4 +70,20 @@ public class FrequenciaDAO {
             throw new RuntimeException("Erro ao deletar frequência: " + e.getMessage(), e);
         }
     }
+
+    public void DeletarTodoFrequenciaUsuario(int id) {
+        String sql = "DELETE "
+                + "FROM Frequencia fr "
+                + "WHERE fr.id_aluno = ?";
+
+        try (Connection conn = ConexaoFactory.getConexao();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao deletar" + e.getMessage(), e);
+        }
+    }
 }

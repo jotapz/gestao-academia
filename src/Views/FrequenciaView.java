@@ -18,19 +18,25 @@ public class FrequenciaView extends JFrame {
     private JCheckBox chkPresente = new JCheckBox("Presente");
     private JButton btnSalvar = new JButton("Registrar");
     private JButton btnListar = new JButton("Listar");
+    private JButton btnDeletar = new JButton("Deletar");
     private JTextArea txtResultado = new JTextArea(10, 40);
 
     public FrequenciaView() {
         super("Registro de Frequência");
-        setLayout(new FlowLayout());
+        setLayout(new BorderLayout(5,5));
         carregarAlunos();
 
-        add(new JLabel("Aluno:"));
-        add(cbAluno);
-        add(chkPresente);
-        add(btnSalvar);
-        add(btnListar);
-        add(new JScrollPane(txtResultado));
+
+        JPanel painelBox = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        painelBox.add(new JLabel("Aluno:"));
+        painelBox.add(cbAluno);
+        painelBox.add(chkPresente);
+        painelBox.add(btnSalvar);
+        painelBox.add(btnListar);
+        painelBox.add(btnDeletar);
+
+        add(painelBox, BorderLayout.NORTH);
+        add(new JScrollPane(txtResultado), BorderLayout.CENTER);
 
         btnSalvar.addActionListener(this::registrar);
         btnListar.addActionListener(this::listar);
@@ -46,12 +52,7 @@ public class FrequenciaView extends JFrame {
     }
 
     private void registrar(ActionEvent e) {
-        Aluno aluno = (Aluno) cbAluno.getSelectedItem();
-        Frequencia f = new Frequencia();
-        f.setAluno(aluno);
-        f.setData(new Date());
-        f.setPresenca(chkPresente.isSelected());
-        controller.registrar(f);
+        controller.registrar((Aluno)cbAluno.getSelectedItem(), chkPresente.isSelected());
         JOptionPane.showMessageDialog(this, "Frequência registrada!");
     }
 
