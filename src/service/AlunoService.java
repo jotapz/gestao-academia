@@ -3,7 +3,7 @@ package service;
 import dao.AlunoDAO;
 import dao.FrequenciaDAO;
 import dao.PlanoTreinoDAO;
-import entity.Aluno;
+import model.Aluno;
 import java.util.Date;
 import java.util.List;
 

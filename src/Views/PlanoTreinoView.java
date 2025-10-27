@@ -3,9 +3,9 @@ package Views;
 import controller.PlanoTreinoController;
 import controller.AlunoController;
 import controller.InstrutorController;
-import entity.PlanoTreino;
-import entity.Aluno;
-import entity.Instrutor;
+import model.PlanoTreino;
+import model.Aluno;
+import model.Instrutor;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -28,7 +28,7 @@ public class PlanoTreinoView extends JFrame {
 
     public PlanoTreinoView() {
         super("Cadastro de Planos de Treino");
-        setLayout(new BorderLayout(5,5));
+        setLayout(new BorderLayout(5, 5));
 
 
         carregarCombos();
@@ -79,8 +79,9 @@ public class PlanoTreinoView extends JFrame {
 
     private void salvar(ActionEvent e) {
 
-        controller.cadastrar(txtDesc.getText(), Integer.parseInt(txtDuracao.getText()), ((Aluno)cbAluno.getSelectedItem()), ((Instrutor)cbInstrutor.getSelectedItem()));
+        controller.cadastrar(txtDesc.getText(), Integer.parseInt(txtDuracao.getText()), ((Aluno) cbAluno.getSelectedItem()), ((Instrutor) cbInstrutor.getSelectedItem()));
         JOptionPane.showMessageDialog(this, "Plano de treino cadastrado!");
+        listarautomatico(e);
     }
 
     private void listar(ActionEvent e) {
@@ -92,7 +93,7 @@ public class PlanoTreinoView extends JFrame {
         }
     }
 
-    private void atualizar(ActionEvent e){
+    private void atualizar(ActionEvent e) {
         String idStr = JOptionPane.showInputDialog(this,
                 "Digite o ID do plano que deseja atualizar",
                 "Atualizar plano treino",
@@ -103,10 +104,11 @@ public class PlanoTreinoView extends JFrame {
                     "Erro de validação",
                     JOptionPane.ERROR_MESSAGE);
         }
-        controller.atualizar(txtDesc.getText(), Integer.parseInt(txtDuracao.getText()), ((Aluno)cbAluno.getSelectedItem()), ((Instrutor)cbInstrutor.getSelectedItem()), Integer.parseInt(idStr));
+        controller.atualizar(txtDesc.getText(), Integer.parseInt(txtDuracao.getText()), ((Aluno) cbAluno.getSelectedItem()), ((Instrutor) cbInstrutor.getSelectedItem()), Integer.parseInt(idStr));
+        listarautomatico(e);
     }
 
-    private void deletar(ActionEvent e){
+    private void deletar(ActionEvent e) {
         String idStr = JOptionPane.showInputDialog(this,
                 "Preencha com o ID do plano que deseja deletar",
                 "Deletar plano treino",
@@ -119,5 +121,14 @@ public class PlanoTreinoView extends JFrame {
                     JOptionPane.ERROR_MESSAGE);
         }
         controller.deletar(Integer.parseInt(idStr));
+        listarautomatico(e);
+    }
+
+    public void listarautomatico(ActionEvent e) {
+        List<PlanoTreino> lista = controller.listar();
+        txtResultado.setText("");
+        for (PlanoTreino planoTreino : lista) {
+            txtResultado.append("ID: " + planoTreino.getId() + " | Nome: " + planoTreino.getAluno() + " | Esp: " + planoTreino.getInstrutor() + "\n");
+        }
     }
 }

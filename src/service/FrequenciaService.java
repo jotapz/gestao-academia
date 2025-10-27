@@ -1,8 +1,8 @@
 package service;
 
 import dao.FrequenciaDAO;
-import entity.Aluno;
-import entity.Frequencia;
+import model.Aluno;
+import model.Frequencia;
 
 import java.util.Date;
 import java.util.List;

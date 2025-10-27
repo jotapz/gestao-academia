@@ -2,12 +2,11 @@ package Views;
 
 import controller.FrequenciaController;
 import controller.AlunoController;
-import entity.Aluno;
-import entity.Frequencia;
+import model.Aluno;
+import model.Frequencia;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.util.Date;
 import java.util.List;
 
 public class FrequenciaView extends JFrame {
@@ -33,7 +32,6 @@ public class FrequenciaView extends JFrame {
         painelBox.add(chkPresente);
         painelBox.add(btnSalvar);
         painelBox.add(btnListar);
-        painelBox.add(btnDeletar);
 
         add(painelBox, BorderLayout.NORTH);
         add(new JScrollPane(txtResultado), BorderLayout.CENTER);

@@ -1,10 +1,9 @@
 package controller;
 
-import entity.Aluno;
-import entity.Frequencia;
+import model.Aluno;
+import model.Frequencia;
 import service.FrequenciaService;
 
-import java.awt.*;
 import java.util.List;
 
 public class FrequenciaController {

@@ -1,8 +1,8 @@
 package controller;
 
-import entity.Aluno;
-import entity.Instrutor;
-import entity.PlanoTreino;
+import model.Aluno;
+import model.Instrutor;
+import model.PlanoTreino;
 import service.PlanoTreinoService;
 import java.util.List;
 

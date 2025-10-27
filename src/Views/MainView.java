@@ -28,8 +28,5 @@ public class MainView extends JFrame {
         setSize(400, 200);
         setVisible(true);
     }
-
-    public static void main(String[] args) {
-        new MainView();
-    }
 }
+
