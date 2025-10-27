@@ -1,4 +1,4 @@
-package entity;
+package model;
 
 public class PlanoTreino {
     private int id_plano;

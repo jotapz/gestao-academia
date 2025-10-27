@@ -1,6 +1,6 @@
 package controller;
 
-import entity.Instrutor;
+import model.Instrutor;
 import service.InstrutorService;
 import java.util.List;
 

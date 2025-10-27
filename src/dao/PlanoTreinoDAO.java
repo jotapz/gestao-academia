@@ -1,9 +1,9 @@
 package dao;
 
-import entity.PlanoTreino;
+import model.PlanoTreino;
 // Pode ser necessário importar Aluno e Instrutor também, dependendo da sua entidade
-import entity.Aluno;
-import entity.Instrutor;
+import model.Aluno;
+import model.Instrutor;
 
 import java.sql.*;
 import java.util.ArrayList;

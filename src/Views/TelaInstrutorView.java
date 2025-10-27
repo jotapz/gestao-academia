@@ -1,7 +1,7 @@
 package Views;
 
 import controller.InstrutorController;
-import entity.Instrutor;
+import model.Instrutor;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;

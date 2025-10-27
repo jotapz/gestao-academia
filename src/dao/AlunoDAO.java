@@ -1,6 +1,6 @@
 package dao;
 
-import entity.Aluno;
+import model.Aluno;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;

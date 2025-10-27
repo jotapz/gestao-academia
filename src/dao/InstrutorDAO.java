@@ -1,6 +1,6 @@
 package dao;
 
-import entity.Instrutor;
+import model.Instrutor;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;

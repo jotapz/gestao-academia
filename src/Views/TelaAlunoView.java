@@ -1,11 +1,12 @@
 package Views;
 
 import controller.AlunoController;
-import entity.Aluno;
+import model.Aluno;
+import model.Instrutor;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.util.Date;
 import java.util.List;
 
 public class TelaAlunoView extends JFrame {
@@ -65,6 +66,7 @@ public class TelaAlunoView extends JFrame {
         //caso nao esteja vazio ele vai chamar o metodo cadastrar do AlunoController e passar como parametro o txtnome e txtcpf coomo string.
         controller.cadastrar(txtNome.getText(), txtCpf.getText());
         JOptionPane.showMessageDialog(this, "Aluno cadastrado!");
+        listarautomatico(e);
     }
 
     private void listar(ActionEvent e) {
@@ -93,6 +95,7 @@ public class TelaAlunoView extends JFrame {
         }
         //chama o metodo atualizar do alunocontroller passando no parâmetro o get do txtnome e txtcpf para atualizar o aluno coom aquele id
         controller.atualizar(txtNome.getText(), txtCpf.getText(), Integer.parseInt(idStr));
+        listarautomatico(e);
     }
 
 
@@ -119,6 +122,15 @@ public class TelaAlunoView extends JFrame {
         if (confirm == JOptionPane.YES_NO_OPTION) {
             controller.deletar(id);
             JOptionPane.showMessageDialog(this,"Aluno deletado com sucesso!");
+        }
+        listarautomatico(e);
+    }
+
+    public void listarautomatico(ActionEvent e) {
+        List<Aluno> lista = controller.listar();
+        txtResultado.setText("");
+        for (Aluno aluno : lista) {
+            txtResultado.append("ID: " + aluno.getId() + " | Nome: " + aluno.getNome() + " | Esp: " + aluno.getCpf() + "\n");
         }
     }
 }

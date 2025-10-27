@@ -1,9 +1,9 @@
 package service;
 
 import dao.PlanoTreinoDAO;
-import entity.Aluno;
-import entity.Instrutor;
-import entity.PlanoTreino;
+import model.Aluno;
+import model.Instrutor;
+import model.PlanoTreino;
 import java.util.List;
 
 public class PlanoTreinoService {

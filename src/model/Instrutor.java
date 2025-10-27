@@ -1,4 +1,4 @@
-package entity;
+package model;
 
 public class Instrutor {
     private int id_Instrutor;

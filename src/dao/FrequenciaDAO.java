@@ -1,7 +1,7 @@
 package dao;
 
-import entity.Frequencia;
-import entity.Aluno;
+import model.Frequencia;
+import model.Aluno;
 
 import java.sql.*;
 import java.util.ArrayList;
