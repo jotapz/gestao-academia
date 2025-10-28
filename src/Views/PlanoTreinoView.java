@@ -81,13 +81,12 @@ public class PlanoTreinoView extends JFrame {
 
         controller.cadastrar(txtDesc.getText(), Integer.parseInt(txtDuracao.getText()), ((Aluno) cbAluno.getSelectedItem()), ((Instrutor) cbInstrutor.getSelectedItem()));
         JOptionPane.showMessageDialog(this, "Plano de treino cadastrado!");
-        listarautomatico(e);
+        listarautomatico();
     }
 
     private void listar(ActionEvent e) {
-        List<PlanoTreino> lista = controller.listar();
         txtResultado.setText("");
-        for (PlanoTreino p : lista) {
+        for (PlanoTreino p : controller.listar()) {
             txtResultado.append("ID: " + p.getId() + " | Desc: " + p.getDescricao() +
                     " | Aluno: " + p.getAluno().getNome() + " | Instrutor: " + p.getInstrutor().getNome() + "\n");
         }
@@ -105,7 +104,7 @@ public class PlanoTreinoView extends JFrame {
                     JOptionPane.ERROR_MESSAGE);
         }
         controller.atualizar(txtDesc.getText(), Integer.parseInt(txtDuracao.getText()), ((Aluno) cbAluno.getSelectedItem()), ((Instrutor) cbInstrutor.getSelectedItem()), Integer.parseInt(idStr));
-        listarautomatico(e);
+        listarautomatico();
     }
 
     private void deletar(ActionEvent e) {
@@ -121,10 +120,10 @@ public class PlanoTreinoView extends JFrame {
                     JOptionPane.ERROR_MESSAGE);
         }
         controller.deletar(Integer.parseInt(idStr));
-        listarautomatico(e);
+        listarautomatico();
     }
 
-    public void listarautomatico(ActionEvent e) {
+    public void listarautomatico() {
         List<PlanoTreino> lista = controller.listar();
         txtResultado.setText("");
         for (PlanoTreino planoTreino : lista) {

@@ -4,6 +4,8 @@ import controller.FrequenciaController;
 import controller.AlunoController;
 import model.Aluno;
 import model.Frequencia;
+import model.PlanoTreino;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -52,9 +54,18 @@ public class FrequenciaView extends JFrame {
     private void registrar(ActionEvent e) {
         controller.registrar((Aluno)cbAluno.getSelectedItem(), chkPresente.isSelected());
         JOptionPane.showMessageDialog(this, "Frequência registrada!");
+        listarautomatico();
     }
 
     private void listar(ActionEvent e) {
+        Aluno aluno = (Aluno) cbAluno.getSelectedItem();
+        txtResultado.setText("");
+        for (Frequencia f : controller.listarPorAluno(aluno.getId())) {
+            txtResultado.append("Data: " + f.getData() + " | Presença: " + (f.isPresenca() ? "Sim" : "Não") + "\n");
+        }
+    }
+
+    public void listarautomatico() {
         Aluno aluno = (Aluno) cbAluno.getSelectedItem();
         List<Frequencia> lista = controller.listarPorAluno(aluno.getId());
         txtResultado.setText("");
