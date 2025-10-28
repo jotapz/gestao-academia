@@ -127,7 +127,8 @@ public class PlanoTreinoView extends JFrame {
         List<PlanoTreino> lista = controller.listar();
         txtResultado.setText("");
         for (PlanoTreino planoTreino : lista) {
-            txtResultado.append("ID: " + planoTreino.getId() + " | Nome: " + planoTreino.getAluno() + " | Esp: " + planoTreino.getInstrutor() + "\n");
+            txtResultado.append("ID: " + planoTreino.getId() + " | Desc: " + planoTreino.getDescricao() +
+                    " | Aluno: " + planoTreino.getAluno().getNome() + " | Instrutor: " + planoTreino.getInstrutor().getNome() + "\n") ;
         }
     }
 }
