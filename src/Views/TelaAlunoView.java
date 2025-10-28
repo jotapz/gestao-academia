@@ -66,13 +66,12 @@ public class TelaAlunoView extends JFrame {
         //caso nao esteja vazio ele vai chamar o metodo cadastrar do AlunoController e passar como parametro o txtnome e txtcpf coomo string.
         controller.cadastrar(txtNome.getText(), txtCpf.getText());
         JOptionPane.showMessageDialog(this, "Aluno cadastrado!");
-        listarautomatico(e);
+        listarautomatico();
     }
 
     private void listar(ActionEvent e) {
-        List<Aluno> lista = controller.listar();
         txtResultado.setText("");
-        for (Aluno aluno : lista) {
+        for (Aluno aluno : controller.listar()) {
             txtResultado.append("ID: " + aluno.getId() + " | Nome: " + aluno.getNome() + " | CPF: " + aluno.getCpf() + "\n");
         }
         JOptionPane.showMessageDialog(this, "Alunos listados!");
@@ -95,7 +94,7 @@ public class TelaAlunoView extends JFrame {
         }
         //chama o metodo atualizar do alunocontroller passando no parâmetro o get do txtnome e txtcpf para atualizar o aluno coom aquele id
         controller.atualizar(txtNome.getText(), txtCpf.getText(), Integer.parseInt(idStr));
-        listarautomatico(e);
+        listarautomatico();
     }
 
 
@@ -123,10 +122,10 @@ public class TelaAlunoView extends JFrame {
             controller.deletar(id);
             JOptionPane.showMessageDialog(this,"Aluno deletado com sucesso!");
         }
-        listarautomatico(e);
+        listarautomatico();
     }
 
-    public void listarautomatico(ActionEvent e) {
+    public void listarautomatico() {
         List<Aluno> lista = controller.listar();
         txtResultado.setText("");
         for (Aluno aluno : lista) {

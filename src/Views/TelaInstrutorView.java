@@ -57,19 +57,18 @@ public class TelaInstrutorView extends JFrame {
 		}
 		controller.cadastrar(txtNome.getText(), txtEsp.getText());
 		JOptionPane.showMessageDialog(this, "Instrutor cadastrado!");
-		listarautomatico(e);
+		listarautomatico();
 	}
 
 	private void listar(ActionEvent e) {
-		List<Instrutor> lista = controller.listar();
 		txtResultado.setText("");
-		for (Instrutor instrutor : lista) {
+		for (Instrutor instrutor : controller.listar()) {
 			txtResultado.append("ID: " + instrutor.getId() + " | Nome: " + instrutor.getNome() + " | Esp: " + instrutor.getEspecialidade() + "\n");
 		}
 		JOptionPane.showMessageDialog(this, "Instrutores listados!");
 	}
 
-	public void listarautomatico(ActionEvent e) {
+	public void listarautomatico() {
 		List<Instrutor> lista = controller.listar();
 		txtResultado.setText("");
 		for (Instrutor instrutor : lista) {
@@ -91,7 +90,7 @@ public class TelaInstrutorView extends JFrame {
 			return;
 		}
 		controller.atualizar(txtNome.getText(), txtEsp.getText(), Integer.parseInt(idStr));
-		listarautomatico(e);
+		listarautomatico();
 	}
 
 
@@ -112,7 +111,7 @@ public class TelaInstrutorView extends JFrame {
 		if (confirm == JOptionPane.YES_NO_OPTION) {
 			controller.deletar(id);
 			JOptionPane.showMessageDialog(this,"Instrutor deletado com suuceesso!");
-			listarautomatico(e);
+			listarautomatico();
 		}
 	}
 }
