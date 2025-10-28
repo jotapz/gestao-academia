@@ -1,5 +1,6 @@
 package Views;
 
+import com.mysql.cj.x.protobuf.Mysqlx;
 import controller.AlunoController;
 import model.Aluno;
 import model.Instrutor;
@@ -79,22 +80,51 @@ public class TelaAlunoView extends JFrame {
 
     //update atualizar na view
     private void atualizar(ActionEvent e) {
-        //cria uma tela que tem uum input e voce vai adicionar o id ele vai ser uuma string
-        String idStr = JOptionPane.showInputDialog(this,
-                "Digite o ID do aluno que deseja ATUALIZAR:",
-                "Atualizar Aluno",
-                JOptionPane.QUESTION_MESSAGE);
-        // see o campo tiver vazio ele avisa e retorna
-        if (idStr.isBlank()) {
-            JOptionPane.showMessageDialog(this,
-                    "Precisa ter o ID",
-                    "Erro de validação",
-                    JOptionPane.ERROR_MESSAGE);
-            return;
+
+        JTextField idField = new JTextField(5);
+        JTextField nomeNovoField = new JTextField(20);
+        JTextField cpfNovoField = new JTextField(15);
+
+        JPanel painelPopup = new JPanel(new GridLayout(0, 2, 5, 5));
+        painelPopup.add(new JLabel("Digite o ID para atualizar:"));
+        painelPopup.add(idField);
+        painelPopup.add(new JLabel("Digite o NOVO Nome:"));
+        painelPopup.add(nomeNovoField);
+        painelPopup.add(new JLabel("Digite o NOVO CPF:"));
+        painelPopup.add(cpfNovoField);
+
+        int resultado = JOptionPane.showConfirmDialog(this, painelPopup,
+                "Atualizar Aluno", JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE);
+
+        if (resultado == JOptionPane.OK_OPTION){
+            String idStr = idField.getText();
+            String nomeNovo = nomeNovoField.getText();
+            String cpfNovo = cpfNovoField.getText();
+
+            if (idStr.isBlank() || nomeNovo.isBlank() || cpfNovo.isBlank()) {
+                JOptionPane.showMessageDialog(this, "Todos os campos são obrigatórios", "Erro de validação", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            controller.atualizar(nomeNovo, cpfNovo, Integer.parseInt(idStr));
+            listarautomatico();
         }
-        //chama o metodo atualizar do alunocontroller passando no parâmetro o get do txtnome e txtcpf para atualizar o aluno coom aquele id
-        controller.atualizar(txtNome.getText(), txtCpf.getText(), Integer.parseInt(idStr));
-        listarautomatico();
+
+//        String idStr, nomenovo, cpfnovo = JOptionPane.showInputDialog(this,
+//                "Digite o ID do aluno que deseja ATUALIZAR:",
+//                "Atualizar Aluno",
+//                JOptionPane.QUESTION_MESSAGE);
+//
+//        if (idStr.isBlank(), nomenovo.isBlank(), cpfnovo.isBlank()) {
+//            JOptionPane.showMessageDialog(this,
+//                    "Precisa ter o ID",
+//                    "Erro de validação",
+//                    JOptionPane.ERROR_MESSAGE);
+//            return;
+//        }
+//        //chama o metodo atualizar do alunocontroller passando no parâmetro o get do txtnome e txtcpf para atualizar o aluno coom aquele id
+//        controller.atualizar(txtNome.getText(), txtCpf.getText(), Integer.parseInt(idStr));
+//        listarautomatico();
     }
 
 
@@ -129,7 +159,7 @@ public class TelaAlunoView extends JFrame {
         List<Aluno> lista = controller.listar();
         txtResultado.setText("");
         for (Aluno aluno : lista) {
-            txtResultado.append("ID: " + aluno.getId() + " | Nome: " + aluno.getNome() + " | Esp: " + aluno.getCpf() + "\n");
+            txtResultado.append("ID: " + aluno.getId() + " | Nome: " + aluno.getNome() + " | CPF: " + aluno.getCpf() + "\n");
         }
     }
 }
